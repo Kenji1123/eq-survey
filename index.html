@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phiếu Khảo Sát EQ - THCS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .intro {
+            background: #f8f9fa;
+            padding: 25px 30px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .intro h2 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .intro p {
+            color: #555;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .question {
+            margin-bottom: 35px;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 5px solid #667eea;
+        }
+
+        .question-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .question-text {
+            color: #555;
+            margin-bottom: 15px;
+            font-size: 1.05em;
+        }
+
+        .image-placeholder {
+            background: #e9ecef;
+            border: 2px dashed #667eea;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            margin: 15px 0;
+            color: #667eea;
+            font-style: italic;
+        }
+
+        .question img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 15px 0;
+            display: block;
+        }
+
+        .options {
+            margin-top: 15px;
+        }
+
+        .option {
+            margin-bottom: 12px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid #e9ecef;
+        }
+
+        .option:hover {
+            background: #f0f4ff;
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .option input[type="radio"] {
+            margin-right: 10px;
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+        }
+
+        .option label {
+            cursor: pointer;
+            color: #333;
+            font-size: 1.02em;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 18px 50px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.5);
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .result {
+            display: none;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .score {
+            font-size: 3em;
+            font-weight: bold;
+            color: #764ba2;
+            margin: 20px 0;
+        }
+
+        .feedback {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .feedback h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .feedback p {
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .question {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 PHIẾU KHẢO SÁT EQ</h1>
+            <p>Dành cho học sinh THCS (Lớp 6–9)</p>
+        </div>
+
+        <div class="intro">
+            <h2>Hướng dẫn</h2>
+            <p>Hãy đọc kỹ từng câu và chọn đáp án em thấy đúng với mình nhất.</p>
+        </div>
+
+        <div class="content">
+            <form id="surveyForm">
+                <!-- Câu 1 -->
+                <div class="question">
+                    <div class="question-title">Câu 1. Nhận biết cảm xúc</div>
+                    <div class="question-text">Khi bị điểm kém, em thường:</div>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" name="q1" value="A" id="q1a" required>
+                            <label for="q1a">A. Buồn nhưng biết vì sao mình buồn</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q1" value="B" id="q1b">
+                            <label for="q1b">B. Buồn và không muốn nói chuyện với ai</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q1" value="C" id="q1c">
+                            <label for="q1c">C. Cáu giận, bực bội với mọi người</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Câu 2 -->
+                <div class="question">
+                    <div class="question-title">Câu 2. Kiểm soát cảm xúc</div>
+                    <div class="question-text">Khi bị bạn trêu chọc, em sẽ:</div>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" name="q2" value="A" id="q2a" required>
+                            <label for="q2a">A. Bình tĩnh, bỏ qua hoặc nói rõ cảm xúc của mình</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q2" value="B" id="q2b">
+                            <label for="q2b">B. Im lặng nhưng trong lòng rất khó chịu</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q2" value="C" id="q2c">
+                            <label for="q2c">C. Trêu lại hoặc cãi nhau</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Câu 3 -->
+                <div class="question">
+                    <div class="question-title">Câu 3. Đồng cảm</div>
+                    <div class="question-text">Khi thấy bạn thân buồn trong giờ ra chơi, em sẽ:</div>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" name="q3" value="A" id="q3a" required>
+                            <label for="q3a">A. Hỏi han và ở bên bạn</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q3" value="B" id="q3b">
+                            <label for="q3b">B. Nhìn thấy nhưng không biết nói gì</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q3" value="C" id="q3c">
+                            <label for="q3c">C. Kệ bạn vì nghĩ đó không phải việc của mình</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Câu 4 -->
+                <div class="question">
+                    <div class="question-title">Câu 4. Ứng xử khi mâu thuẫn</div>
+                    <div class="question-text">Khi cãi nhau với bạn, em thường:</div>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" name="q4" value="A" id="q4a" required>
+                            <label for="q4a">A. Nói chuyện lại để làm hòa</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q4" value="B" id="q4b">
+                            <label for="q4b">B. Tránh mặt bạn một thời gian</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q4" value="C" id="q4c">
+                            <label for="q4c">C. Giận lâu và không muốn nói chuyện nữa</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Câu 5 -->
+                <div class="question">
+                    <div class="question-title">Câu 5. Quản lý căng thẳng</div>
+                    <div class="question-text">Khi có nhiều bài tập và bài kiểm tra, em sẽ:</div>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" name="q5" value="A" id="q5a" required>
+                            <label for="q5a">A. Sắp xếp thời gian học và nghỉ ngơi</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q5" value="B" id="q5b">
+                            <label for="q5b">B. Lo lắng nhưng vẫn cố làm</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q5" value="C" id="q5c">
+                            <label for="q5c">C. Mệt mỏi và không muốn học</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Câu 6 -->
+                <div class="question">
+                    <div class="question-title">Câu 6. (Có hình ảnh)</div>
+                    <div class="image-placeholder">
+                        🖼 Thêm hình ảnh: Một học sinh ngồi một mình ở góc lớp, cúi đầu
+                        <br><small>(Sẽ thêm ảnh sau)</small>
+                    </div>
+                    <div class="question-text">Khi thấy bạn trong hình, em nghĩ:</div>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" name="q6" value="A" id="q6a" required>
+                            <label for="q6a">A. Bạn ấy có thể đang buồn và cần được quan tâm</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q6" value="B" id="q6b">
+                            <label for="q6b">B. Có thể bạn ấy chỉ muốn ngồi một mình</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q6" value="C" id="q6c">
+                            <label for="q6c">C. Không để ý vì không liên quan đến em</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Câu 7 -->
+                <div class="question">
+                    <div class="question-title">Câu 7. Tự tạo động lực</div>
+                    <div class="question-text">Khi làm sai bài hoặc bị nhắc nhở, em sẽ:</div>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" name="q7" value="A" id="q7a" required>
+                            <label for="q7a">A. Rút kinh nghiệm để làm tốt hơn</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q7" value="B" id="q7b">
+                            <label for="q7b">B. Buồn và mất tự tin một lúc</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q7" value="C" id="q7c">
+                            <label for="q7c">C. Chán nản và không muốn cố gắng nữa</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Câu 8 -->
+                <div class="question">
+                    <div class="question-title">Câu 8. (Có hình ảnh)</div>
+                    <div class="image-placeholder">
+                        🖼 Thêm hình ảnh: Hai bạn học sinh đang tranh cãi trong lớp
+                        <br><small>(Sẽ thêm ảnh sau)</small>
+                    </div>
+                    <div class="question-text">Nếu em ở trong tình huống này, em sẽ:</div>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" name="q8" value="A" id="q8a" required>
+                            <label for="q8a">A. Bình tĩnh lắng nghe và tìm cách giải quyết</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q8" value="B" id="q8b">
+                            <label for="q8b">B. Đứng về phía bạn thân của mình</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q8" value="C" id="q8c">
+                            <label for="q8c">C. Bỏ đi vì không muốn dính líu</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Câu 9 -->
+                <div class="question">
+                    <div class="question-title">Câu 9. Giao tiếp cảm xúc</div>
+                    <div class="question-text">Khi không đồng ý với ý kiến của bạn, em sẽ:</div>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" name="q9" value="A" id="q9a" required>
+                            <label for="q9a">A. Nói nhẹ nhàng và tôn trọng bạn</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q9" value="B" id="q9b">
+                            <label for="q9b">B. Không nói gì cho khỏi phiền</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q9" value="C" id="q9c">
+                            <label for="q9c">C. Nói thẳng khiến bạn khó chịu</label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Câu 10 -->
+                <div class="question">
+                    <div class="question-title">Câu 10. Hiểu người khác</div>
+                    <div class="question-text">Để biết bạn bè đang vui hay buồn, em thường:</div>
+                    <div class="options">
+                        <div class="option">
+                            <input type="radio" name="q10" value="A" id="q10a" required>
+                            <label for="q10a">A. Nhìn nét mặt, giọng nói và hành động của bạn</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q10" value="B" id="q10b">
+                            <label for="q10b">B. Đoán theo cảm giác của mình</label>
+                        </div>
+                        <div class="option">
+                            <input type="radio" name="q10" value="C" id="q10c">
+                            <label for="q10c">C. Không quan tâm nhiều</label>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">Nộp bài</button>
+            </form>
+
+            <div class="result" id="result">
+                <h2>Kết quả khảo sát EQ của bạn</h2>
+                <div class="score" id="score"></div>
+                <div class="feedback" id="feedback"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('surveyForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            let score = 0;
+            const formData = new FormData(this);
+            
+            for (let i = 1; i <= 10; i++) {
+                const answer = formData.get('q' + i);
+                if (answer === 'A') score += 3;
+                else if (answer === 'B') score += 2;
+                else if (answer === 'C') score += 1;
+            }
+            
+            const maxScore = 30;
+            const percentage = Math.round((score / maxScore) * 100);
+            
+            document.getElementById('score').textContent = score + '/' + maxScore + ' điểm (' + percentage + '%)';
+            
+            let feedback = '';
+            if (score >= 25) {
+                feedback = `
+                    <h3>🌟 Xuất sắc!</h3>
+                    <p>Em có chỉ số EQ rất cao! Em biết nhận biết và kiểm soát cảm xúc của mình tốt, đồng thời rất có khả năng đồng cảm và giao tiếp với người khác.</p>
+                    <p><strong>Gợi ý:</strong> Tiếp tục phát huy điểm mạnh này và giúp đỡ các bạn khác phát triển kỹ năng cảm xúc.</p>
+                `;
+            } else if (score >= 20) {
+                feedback = `
+                    <h3>👍 Tốt!</h3>
+                    <p>Em có chỉ số EQ khá tốt. Em đã biết cách nhận biết và xử lý cảm xúc của mình, nhưng vẫn còn một số tình huống em có thể làm tốt hơn.</p>
+                    <p><strong>Gợi ý:</strong> Hãy luyện tập thêm về kỹ năng đồng cảm và giao tiếp cảm xúc với bạn bè.</p>
+                `;
+            } else if (score >= 15) {
+                feedback = `
+                    <h3>💪 Trung bình!</h3>
+                    <p>Em đang ở mức EQ trung bình. Em có thể nhận biết cảm xúc cơ bản nhưng đôi khi gặp khó khăn trong việc kiểm soát hoặc chia sẻ cảm xúc.</p>
+                    <p><strong>Gợi ý:</strong> Hãy tập nhận biết cảm xúc của mình mỗi ngày và thử chia sẻ với người thân.</p>
+                `;
+            } else {
+                feedback = `
+                    <h3>🌱 Cần phát triển!</h3>
+                    <p>Em đang cần rèn luyện thêm về kỹ năng cảm xúc. Đừng lo lắng, đây là kỹ năng có thể học được!</p>
+                    <p><strong>Gợi ý:</strong> Hãy bắt đầu bằng việc chú ý đến cảm xúc của mình và thử đặt tên cho từng cảm xúc. Tham khảo thầy cô hoặc cha mẹ để được hỗ trợ thêm.</p>
+                `;
+            }
+            
+            document.getElementById('feedback').innerHTML = feedback;
+            document.getElementById('result').classList.add('show');
+            
+            this.style.display = 'none';
+            
+            window.scrollTo({
+                top: document.getElementById('result').offsetTop - 100,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>
